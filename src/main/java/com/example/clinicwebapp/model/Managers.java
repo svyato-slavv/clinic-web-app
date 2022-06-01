@@ -14,6 +14,8 @@ import java.util.List;
 public class Managers {
     @Id
     @Column(name = "id")
+    @GeneratedValue(strategy = GenerationType.SEQUENCE,generator = "managers_id_seq")
+    @SequenceGenerator(name = "managers_id_seq",schema = "edu_schema",allocationSize = 1)
     private Long id;
     @Column(name = "name")
     private String name;
@@ -23,7 +25,7 @@ public class Managers {
     private String patronymic;
     @Column(name = "contact_number")
     private String contactNumber;
-    @OneToMany
+    @OneToMany(mappedBy = "manager", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     private List<Clients> clients;
 
 

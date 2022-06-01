@@ -14,6 +14,8 @@ import java.util.List;
 public class Doctors {
     @Id
     @Column(name = "id")
+    @GeneratedValue(strategy = GenerationType.SEQUENCE,generator = "doctors_id_seq")
+    @SequenceGenerator(name = "doctors_id_seq",schema = "edu_schema",allocationSize = 1)
     private Long id;
     @Column(name = "name")
     private String name;
@@ -25,7 +27,7 @@ public class Doctors {
     private String specialization;
     @Column(name = "license_for_children")
     private boolean licenseForChildren;
-    @OneToMany
+    @OneToMany(mappedBy = "doctors",fetch = FetchType.EAGER,cascade = CascadeType.ALL)
     private List<Visits> doctors;
 
 }
