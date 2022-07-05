@@ -1,6 +1,5 @@
 package com.example.clinicwebapp.model;
 
-import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -15,7 +14,7 @@ public class Clients {
     @Id
     @Column(name = "id")
     @GeneratedValue(strategy = GenerationType.SEQUENCE,generator = "clients_id_seq")
-    @SequenceGenerator(name = "clients_id_seq",schema = "edu_schema",allocationSize = 1)
+    @SequenceGenerator(name = "clients_id_seq",schema = "clinic_schema",allocationSize = 1)
     private Long id;
     @Column(name = "first_name")
     private String firstName;
@@ -24,16 +23,18 @@ public class Clients {
     @Column(name = "patronymic")
     private String patronymic;
     @Column(name = "passport_series")
-    private int passportSeries;
+    private Long passportSeries;
     @Column(name = "passport_number")
-    private int passportNumber;
+    private Long passportNumber;
     @Column(name = "snils")
-    private int snils;
+    private String snils;
+    @Column(name = "contact_number")
+    private String contactNumber;
     @OneToMany(mappedBy = "clients", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     private List<Visits> visits;
     @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JoinColumn(name = "id")
-    private Clients_info clients_info;
+    private ClientsInfo clients_info;
     @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JoinColumn(name = "manager_id")
     private Managers manager;
