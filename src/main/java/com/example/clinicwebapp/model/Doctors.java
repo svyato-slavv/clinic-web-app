@@ -29,7 +29,7 @@ public class Doctors {
     private String licenseForChildren;
     @Column(name = "contact_number")
     private String contactNumber;
-    @OneToMany(mappedBy = "doctors",fetch = FetchType.EAGER,cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "doctorId",fetch = FetchType.EAGER,cascade = CascadeType.ALL)
     private List<Visits> doctors;
 
 }

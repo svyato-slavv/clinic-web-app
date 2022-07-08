@@ -15,9 +15,7 @@ import org.springframework.stereotype.Service;
 import java.sql.Timestamp;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @Service
 @RequiredArgsConstructor
@@ -39,14 +37,14 @@ public class VisitServiceImpl implements VisitService {
         String[] tokenC = visitDto.getFullClientInfo().split(" ");
         for (Clients clients : clientsRepo.findAll()) {
             if (tokenC[0].equalsIgnoreCase(clients.getLastName()) && tokenC[1].equalsIgnoreCase(clients.getFirstName()) && tokenC[2].equalsIgnoreCase(clients.getPatronymic()) && tokenC[3].equalsIgnoreCase(clients.getSnils())) {
-                visits.setClients(clients);
+                visits.setClientId(clients.getId());
             }
         }
 
         String[] tokenD = visitDto.getFullDoctorInfo().split(" ");
         for (Doctors doctors : doctorsRepo.findAll()) {
             if (doctors.getLastName().equalsIgnoreCase(tokenD[0]) && doctors.getName().equalsIgnoreCase(tokenD[1]) && doctors.getPatronymic().equalsIgnoreCase(tokenD[2])) {
-                visits.setDoctors(doctors);
+                visits.setDoctorId(doctors.getId());
             }
         }
 
@@ -72,7 +70,7 @@ public class VisitServiceImpl implements VisitService {
         String[] tokenC = visitDto.getFullClientInfo().split(" ");
         for (Clients clients : clientsRepo.findAll()) {
             if (tokenC[0].equalsIgnoreCase(clients.getLastName()) && tokenC[1].equalsIgnoreCase(clients.getFirstName()) && tokenC[2].equalsIgnoreCase(clients.getPatronymic()) && tokenC[3].equalsIgnoreCase(clients.getSnils())) {
-                visits.setClients(clients);
+                visits.setClientId(clients.getId());
             }
         }
 
@@ -90,7 +88,7 @@ public class VisitServiceImpl implements VisitService {
         String[] tokenD = visitDto.getFullDoctorInfo().split(" ");
         for (Doctors doctors : doctorsRepo.findAll()) {
             if (doctors.getLastName().equalsIgnoreCase(tokenD[0]) && doctors.getName().equalsIgnoreCase(tokenD[1]) && doctors.getPatronymic().equalsIgnoreCase(tokenD[2])) {
-                visits.setDoctors(doctors);
+                visits.setDoctorId(doctors.getId());
             }
         }
 
@@ -113,14 +111,71 @@ public class VisitServiceImpl implements VisitService {
     }
 
     @Override
+    public List<VisitDto> findAllForClientAfter(Long id) {
+        List<VisitDto> list = new ArrayList<>();
+        for (Visits visit : visitsRepo.findAllByClientId(id)) {
+            if (visit.getDateAndTime().after(new Timestamp(new Date().getTime()))) {
+                list.add(map(visit));
+            }
+        }
+        return list;
+//        return Streamable.of(visitsRepo.findAllByClientId(id)).map(this::map).toList();
+    }
+
+    @Override
+    public List<VisitDto> findAllForClientBefore(Long id) {
+        List<VisitDto> list = new ArrayList<>();
+        for (Visits visit : visitsRepo.findAllByClientId(id)) {
+            if (visit.getDateAndTime().before(new Timestamp(new Date().getTime()))) {
+                list.add(map(visit));
+            }
+        }
+        return list;
+    }
+
+    @Override
+    public List<VisitDto> findAllForDoctorAfter(Long id) {
+        List<VisitDto> list = new ArrayList<>();
+        for (Visits visit : visitsRepo.findAllByDoctorId(id)) {
+            if (visit.getDateAndTime().after(new Timestamp(new Date().getTime()))) {
+                list.add(map(visit));
+            }
+        }
+//        return Streamable.of(visitsRepo.findAllByDoctorId(id)).map(this::map).toList();
+        return list;
+    }
+
+    @Override
+    public List<VisitDto> findAllForDoctorBefore(Long id) {
+        List<VisitDto> list = new ArrayList<>();
+        for (Visits visit : visitsRepo.findAllByDoctorId(id)) {
+            if (visit.getDateAndTime().before(new Timestamp(new Date().getTime()))) {
+                list.add(map(visit));
+            }
+        }
+//        return Streamable.of(visitsRepo.findAllByDoctorId(id)).map(this::map).toList();
+        return list;
+    }
+
+    @Override
     public List<VisitDto> findAll() {
         return Streamable.of(visitsRepo.findAll()).map(this::map).toList();
     }
 
     private VisitDto map(Visits visits) {
         VisitDto result = new VisitDto();
-        String clientInfo = visits.getClients().getLastName() + " " + visits.getClients().getFirstName() + " " + visits.getClients().getPatronymic();
-        String doctorInfo = visits.getDoctors().getLastName() + " " + visits.getDoctors().getName() + " " + visits.getDoctors().getPatronymic();
+        Optional<Doctors> doctors = doctorsRepo.findById(visits.getDoctorId());
+        Optional<Clients> clients = clientsRepo.findById(visits.getClientId());
+        String doctorInfo = null;
+        if (doctors.isPresent()) {
+            Doctors doctors1 = doctors.get();
+            doctorInfo = doctors1.getLastName() + " " + doctors1.getName() + " " + doctors1.getPatronymic()+" / "+doctors1.getSpecialization();
+        }
+        String clientInfo = null;
+        if (clients.isPresent()) {
+            Clients clients1 = clients.get();
+            clientInfo = clients1.getLastName() + " " + clients1.getFirstName() + " " + clients1.getPatronymic() + " " + clients1.getSnils();
+        }
         result.setFullClientInfo(clientInfo);
         result.setFullDoctorInfo(doctorInfo);
         Date date = new Date(visits.getDateAndTime().getTime());

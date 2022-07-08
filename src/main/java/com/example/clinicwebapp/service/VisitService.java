@@ -17,5 +17,15 @@ public interface VisitService {
 
     Optional<VisitDto> findById(Long id);
 
+    List<VisitDto> findAllForClientAfter(Long id);
+
+    List<VisitDto> findAllForClientBefore(Long id);
+
+    List<VisitDto> findAllForDoctorAfter(Long id);
+
+    List<VisitDto> findAllForDoctorBefore(Long id);
+
+
+
     List<VisitDto> findAll();
 }

@@ -13,8 +13,8 @@ import java.util.List;
 public class Clients {
     @Id
     @Column(name = "id")
-    @GeneratedValue(strategy = GenerationType.SEQUENCE,generator = "clients_id_seq")
-    @SequenceGenerator(name = "clients_id_seq",schema = "clinic_schema",allocationSize = 1)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "clients_id_seq")
+    @SequenceGenerator(name = "clients_id_seq", schema = "clinic_schema", allocationSize = 1)
     private Long id;
     @Column(name = "first_name")
     private String firstName;
@@ -30,12 +30,6 @@ public class Clients {
     private String snils;
     @Column(name = "contact_number")
     private String contactNumber;
-    @OneToMany(mappedBy = "clients", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "clientId", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     private List<Visits> visits;
-    @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-    @JoinColumn(name = "id")
-    private ClientsInfo clients_info;
-    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-    @JoinColumn(name = "manager_id")
-    private Managers manager;
 }

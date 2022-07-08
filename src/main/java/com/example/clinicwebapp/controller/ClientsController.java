@@ -3,7 +3,9 @@ package com.example.clinicwebapp.controller;
 import com.example.clinicwebapp.exc.ClientNotFoundException;
 import com.example.clinicwebapp.exc.DoctorNotFoundException;
 import com.example.clinicwebapp.model.dto.ClientDto;
+import com.example.clinicwebapp.model.dto.VisitDto;
 import com.example.clinicwebapp.service.ClientService;
+import com.example.clinicwebapp.service.VisitService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
@@ -23,6 +25,8 @@ import java.util.Optional;
 public class ClientsController {
 
     private final ClientService clientService;
+
+    private final VisitService visitService;
 
     @GetMapping
     public String index(Model model) {
@@ -52,6 +56,10 @@ public class ClientsController {
         }
         ClientDto dto = clientService.findById(id).orElseThrow(() -> new ClientNotFoundException(id));
         model.addAttribute("clientDto", dto);
+        List<VisitDto> after = visitService.findAllForClientAfter(id);
+        model.addAttribute("listVisitAfter",after);
+        List<VisitDto> before = visitService.findAllForClientBefore(id);
+        model.addAttribute("listVisitBefore",before);
         return "clients-details";
     }
 
@@ -72,7 +80,7 @@ public class ClientsController {
     }
 
     @PostMapping("/{id}/remove")
-    public String removeClient(@PathVariable(name = "id")Long id,ClientDto dto){
+    public String removeClient(@PathVariable(name = "id") Long id, ClientDto dto) {
         clientService.remove(dto);
         return "redirect:/clients";
     }

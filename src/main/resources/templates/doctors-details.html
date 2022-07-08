@@ -32,8 +32,8 @@
         <!--    </div>-->
 
         <div th:each="el: ${doctorDto}" class="alert alert-info mt-2">
-            <p></p><b>Имя: </b> <span th:text="${el.name}"/></p>
             <p></p><b>Фамилия: </b> <span th:text="${el.lastName}"/></p>
+            <p></p><b>Имя: </b> <span th:text="${el.name}"/></p>
             <p></p><b>Отчество: </b> <span th:text="${el.patronymic}"/></p>
             <p></p><b>Специализация: </b> <span th:text="${el.specialization}"/></p>
             <p></p><b>Детская лицензия: </b> <span th:text="${el.licenseForChildren}"/></p>
@@ -44,6 +44,58 @@
                     <button class="btn btn-warning" type="submit">Удалить</button>
                 </form>
             </div>
+        </div>
+        <div class="table-responsive">
+            <h1>Предстоящие посещения врача:</h1>
+            <table class="table table-striped table-sm">
+                <thead>
+                <tr>
+                    <th scope="col">#</th>
+                    <th scope="col">Клиент</th>
+                    <th scope="col">Дата/Время</th>
+                    <th scope="col">Доктор</th>
+                    <th scope="col">Редактировать</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="visit : ${listVisitAfter}">
+                    <td th:text="${visit.id}">`placeholder`</td>
+                    <td th:text="${visit.fullClientInfo}">random</td>
+                    <td th:text="${visit.dateAndTime}">data</td>
+                    <td th:text="${visit.fullDoctorInfo}">placeholder</td>
+                    <td>
+                        <a th:href="@{/visits/{id}(id=${visit.id})}">Подробнее</a>
+                    </td>
+                </tr>
+
+                </tbody>
+            </table>
+        </div>
+        <div class="table-responsive">
+            <h1>Прошедшие посещения врача:</h1>
+            <table class="table table-striped table-sm">
+                <thead>
+                <tr>
+                    <th scope="col">#</th>
+                    <th scope="col">Клиент</th>
+                    <th scope="col">Дата/Время</th>
+                    <th scope="col">Доктор</th>
+                    <th scope="col">Редактировать</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="visit : ${listVisitBefore}">
+                    <td th:text="${visit.id}">`placeholder`</td>
+                    <td th:text="${visit.fullClientInfo}">random</td>
+                    <td th:text="${visit.dateAndTime}">data</td>
+                    <td th:text="${visit.fullDoctorInfo}">placeholder</td>
+                    <td>
+                        <a th:href="@{/visits/{id}(id=${visit.id})}">Подробнее</a>
+                    </td>
+                </tr>
+
+                </tbody>
+            </table>
         </div>
     </div>
 </div>

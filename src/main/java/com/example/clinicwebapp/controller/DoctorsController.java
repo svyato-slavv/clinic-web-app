@@ -2,7 +2,9 @@ package com.example.clinicwebapp.controller;
 
 import com.example.clinicwebapp.exc.DoctorNotFoundException;
 import com.example.clinicwebapp.model.dto.DoctorDto;
+import com.example.clinicwebapp.model.dto.VisitDto;
 import com.example.clinicwebapp.service.DoctorService;
+import com.example.clinicwebapp.service.VisitService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -21,6 +23,8 @@ import java.util.List;
 public class DoctorsController {
 
     private final DoctorService doctorService;
+
+    private final VisitService visitService;
 
     @GetMapping
     private String index(Model model) {
@@ -50,6 +54,11 @@ public class DoctorsController {
         }
         DoctorDto dto = doctorService.findById(id).orElseThrow(() -> new DoctorNotFoundException(id));
         model.addAttribute("doctorDto", dto);
+        List<VisitDto> after=visitService.findAllForDoctorAfter(id);
+        model.addAttribute("listVisitAfter",after);
+        List<VisitDto> before=visitService.findAllForDoctorBefore(id);
+        model.addAttribute("listVisitBefore",before);
+
         return "doctors-details";
     }
 

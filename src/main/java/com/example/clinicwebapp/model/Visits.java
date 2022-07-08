@@ -20,12 +20,10 @@ public class Visits {
     private Timestamp dateAndTime;
     @Column(name = "survey_result")
     private String surveyResult;
-    @ManyToOne(fetch = FetchType.EAGER, cascade = {CascadeType.PERSIST,CascadeType.MERGE})
-    @JoinColumn(name = "client_id")
-    private Clients clients;
-    @ManyToOne(fetch = FetchType.EAGER, cascade = {CascadeType.PERSIST,CascadeType.MERGE})
-    @JoinColumn(name = "doctor_id")
-    private Doctors doctors;
+    @Column(name = "client_id")
+    private Long clientId;
+    @Column(name = "doctor_id")
+    private Long doctorId;
 
 
 }
