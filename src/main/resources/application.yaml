@@ -4,7 +4,3 @@ spring:
     driver-class-name: org.postgresql.Driver
     password: dev
     username: dev
-
-  jpa:
-    show-sql: true
-

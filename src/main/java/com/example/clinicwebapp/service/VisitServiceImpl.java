@@ -174,7 +174,7 @@ public class VisitServiceImpl implements VisitService {
         String clientInfo = null;
         if (clients.isPresent()) {
             Clients clients1 = clients.get();
-            clientInfo = clients1.getLastName() + " " + clients1.getFirstName() + " " + clients1.getPatronymic() + " " + clients1.getSnils();
+            clientInfo = clients1.getLastName() + " " + clients1.getFirstName() + " " + clients1.getPatronymic() + " / " + clients1.getSnils();
         }
         result.setFullClientInfo(clientInfo);
         result.setFullDoctorInfo(doctorInfo);
